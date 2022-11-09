@@ -1,5 +1,8 @@
+list(include('person'), min=1)
+
+---
 person:
-  - name: str()
+    name: str()
     age: int()
     height: num()
     awesome: bool()
