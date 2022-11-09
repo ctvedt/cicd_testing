@@ -1,9 +1,18 @@
 person:
-    name: "Chris"
+  - name: "Chris"
     age: 23
     height: 185
     awesome: True
-    loopback: "10.0.0.1/24"
+    loopback: 10.0.0.1/24
+    loopback_subnet_cidr: 32
+    loopback6: fe80::1
+    loopback6_subnet_cidr: 128
+    mac: aa:bb:cc:dd:ee:ff
+  - name: "Chris2"
+    age: 24
+    height: 185
+    awesome: True
+    loopback: 10.0.0.1/24
     loopback_subnet_cidr: 32
     loopback6: fe80::1
     loopback6_subnet_cidr: 128
