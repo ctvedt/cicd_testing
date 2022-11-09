@@ -28,3 +28,25 @@ jobs:
         document_path: datamodel.yml
 #        validate_file_extension: 'no' # optional, defaults shown, enum of ['yes', 'no']
 #        filter_extensions: '.yml,.yaml' # optional, defaults shown
+  Yamale:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: test a single file
+        id: single
+        uses: eXpire163/yamale-docker-action@main
+        with:
+          schema-file: "schema_yamale.yml"
+          test-file: "datamodel_yamale.yml"
+          strict: "strict"
+#      - name: or test a folder
+#        id: folder
+#        uses: eXpire163/yamale-docker-action@main
+#        with:
+#          schema-file: "schema.yml"
+#          test-file: "testfiles"
+#          strict: "nonstrict"
+
+#      - name: Get the output time
+#        run: echo "The time was ${{ steps.single.outputs.time }}"
