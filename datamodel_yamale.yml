@@ -1,4 +1,4 @@
-person:
+persons:
   - name: "Chris"
     age: 23
     height: 185

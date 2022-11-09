@@ -1,7 +1,6 @@
-list(include('person'), min=1)
-
+persons: list(include('person'))
 ---
-person:
+person: 
     name: str()
     age: int()
     height: num()
