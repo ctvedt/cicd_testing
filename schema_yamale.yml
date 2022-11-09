@@ -1,12 +1,8 @@
-persons: list(include('person'))
+locations: list(include('location'))
 ---
-person: 
+location: 
     name: str()
-    age: int()
-    height: num()
-    awesome: bool()
-    loopback: ip(version=4)
-    loopback_subnet_cidr: int(min=0,max=32)
-    loopback6: ip(version=6)
-    loopback6_subnet_cidr: int(min=0,max=128)
+    id: int()
+    loopback_ipv4: ip(version=4)
+    loopback_ipv6: ip(version=6)
     mac: mac()

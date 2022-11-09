@@ -1,19 +1,11 @@
-persons:
-  - name: "Chris"
-    age: 23
-    height: 185
-    awesome: True
-    loopback: 10.0.0.1/24
-    loopback_subnet_cidr: 32
-    loopback6: fe80::1
-    loopback6_subnet_cidr: 128
+locations:
+  - name: "Hoffsveien 1A"
+    id: 123
+    loopback_ipv4: 10.0.0.1
+    loopback_ipv6: cafe::123
     mac: aa:bb:cc:dd:ee:ff
-  - name: "Chris2"
-    age: 24
-    height: 185
-    awesome: True
-    loopback: 10.0.0.1/24
-    loopback_subnet_cidr: 32
-    loopback6: fe80::1
-    loopback6_subnet_cidr: 128
-    mac: aa:bb:cc:dd:ee:ff
+  - name: "OUS"
+    age: 234
+    loopback_ipv4: 10.0.0.2
+    loopback_ipv6: cafe::234
+    mac: a1:b2:c3:d4:e5:f6
