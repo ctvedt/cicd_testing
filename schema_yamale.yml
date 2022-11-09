@@ -1,5 +1,5 @@
 person:
-    name: str()
+  - name: str()
     age: int()
     height: num()
     awesome: bool()
