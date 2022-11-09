@@ -1,0 +1,12 @@
+Users:
+  required: true
+  type: list
+  schema:
+    type: dict
+    schema:
+      name:
+        required: true
+        type: string
+      age:
+        required: true
+        type: integer

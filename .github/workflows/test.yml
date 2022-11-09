@@ -16,3 +16,15 @@ jobs:
         run: |
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
+  Validate-YAML:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out repository code
+      uses: actions/checkout@v3
+    - name: Validate YAML against schema
+      uses: navikt/yaml-validator@v4
+      with:
+        schema_path: schema.yml
+        document_path: datamodel.yml
+#        validate_file_extension: 'no' # optional, defaults shown, enum of ['yes', 'no']
+#        filter_extensions: '.yml,.yaml' # optional, defaults shown
