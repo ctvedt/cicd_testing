@@ -3,3 +3,6 @@ person:
     age: int()
     height: num()
     awesome: bool()
+    loopback: ip(version=4)
+    loopback6: ip(version=6)
+    mac: mac()
