@@ -4,5 +4,7 @@ person:
     height: num()
     awesome: bool()
     loopback: ip(version=4)
+    loopback_subnet_cidr: int(min=0,max=32)
     loopback6: ip(version=6)
+    loopback6_subnet_cidr: int(min=0,max=128)
     mac: mac()
