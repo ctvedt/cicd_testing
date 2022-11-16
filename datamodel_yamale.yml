@@ -8,4 +8,4 @@ locations:
     id: 234
     loopback_ipv4: 10.0.0.2
     loopback_ipv6: cafe::234
-    mac: a1:b2:c3:d4:e5:xx
+    mac: a1:b2:c3:d4:e5:aa
