@@ -20,4 +20,4 @@ jobs:
     needs: Validate-YAML-with-Yamale
     steps:
       - name: Print
-        run: echo "Approved!"
+        run: echo "Approved!!"
