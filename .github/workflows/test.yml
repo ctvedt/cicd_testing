@@ -14,3 +14,9 @@ jobs:
           target: datamodel_yamale.yml
           # Uncomment to disable strict checks
           # no-strict: true
+  Approval:
+    runs-on: self-hosted
+    environment: 'protected'
+    steps:
+      - name: Print
+      - run: echo "Approved!"
