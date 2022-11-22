@@ -3,7 +3,7 @@ locations:
     id: 123
     loopback_ipv4: 10.0.0.1
     loopback_ipv6: cafe::123
-    mac: aa:bb:cc:dd:ee:ff
+    mac: aa:bb:cc:dd:ee:xx
   - name: "OUS"
     id: 234
     loopback_ipv4: 10.0.0.2
