@@ -14,10 +14,25 @@ jobs:
           target: datamodel_yamale.yml
           # Uncomment to disable strict checks
           # no-strict: true
-  Approval:
+  RunPythonScript:
     runs-on: self-hosted
-    environment: 'protected'
-    needs: Validate-YAML-with-Yamale
     steps:
-      - name: Print
-        run: echo "Approved!!"
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Create python file
+        run: |
+          cat << EOF > script.py
+          import os
+          os.sys.exit(1)
+          EOF
+      - name: Run python script
+      - run: python script.py
+#  Approval:
+#    runs-on: self-hosted
+#    environment: 'protected'
+#    needs: Validate-YAML-with-Yamale
+#    steps:
+#      - name: Print
+#        run: echo "Approved!!"
