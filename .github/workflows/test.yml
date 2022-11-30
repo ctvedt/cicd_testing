@@ -28,7 +28,7 @@ jobs:
           os.sys.exit(1)
           EOF
       - name: Run python script
-      - run: python script.py
+        run: python script.py
 #  Approval:
 #    runs-on: self-hosted
 #    environment: 'protected'
