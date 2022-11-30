@@ -26,7 +26,7 @@ jobs:
           cat << EOF > script.py
           import os
           print("This will fail!")
-          os.sys.exit(1)
+          os.sys.exit("ERROR! Insert failed message here.")
           EOF
       - name: Run python script
         run: python script.py
