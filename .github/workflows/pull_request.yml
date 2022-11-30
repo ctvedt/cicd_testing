@@ -1,0 +1,11 @@
+name: Pull request submitted
+run-name: ${{ github.actor }} requested merge
+on:
+  pull_request_review:
+    types: [submitted]
+jobs:
+  Print:
+    runs-on: self-hosted
+    steps:
+      - name: Print
+        run: echo "Pull request submitted"
