@@ -25,6 +25,7 @@ jobs:
         run: |
           cat << EOF > script.py
           import os
+          print("This will fail!")
           os.sys.exit(1)
           EOF
       - name: Run python script
