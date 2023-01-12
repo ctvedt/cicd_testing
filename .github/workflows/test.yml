@@ -45,9 +45,9 @@ jobs:
 ##        run: echo "Approved!!"
   Terraform:
     runs-on: self-hosted
-      container:
-        volumes:
-          - ./tfstate/:/tfstate/
+    container:
+      volumes:
+        - ./tfstate/:/tfstate/
     steps:
       - name: Checkout
         uses: actions/checkout@v3
