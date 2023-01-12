@@ -46,8 +46,9 @@ jobs:
   Terraform:
     runs-on: self-hosted
     container:
+      image: ubuntu:latest
       volumes:
-        - ./tfstate/:/tfstate/
+        - ./tfstate:/tfstate
     steps:
       - name: Checkout
         uses: actions/checkout@v3
