@@ -1,5 +1,5 @@
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} {{ github.event_name }} {{ github.head_ref }}
+run-name: ${{ github.actor }} ${{ github.event_name }} ${{ github.head_ref }}
 on: [push]
 jobs:
 #  Validate-YAML-with-Yamale:
@@ -55,7 +55,8 @@ jobs:
   
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
-        with:
+        with: 
+          terraform_wrapper: true
           terraform_version: 1.1.7
 
       - name: Terraform fmt
