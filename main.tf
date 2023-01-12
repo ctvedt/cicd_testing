@@ -1,6 +1,6 @@
 terraform {
   backend "local" {
-    path = "/tfstate/terraform.tfstate"
+    path = "/home/ctvedt/tfstate/terraform.tfstate"
   }
   required_providers {
     docker = {
