@@ -1,5 +1,5 @@
 name: GitHub Actions Demo
-run-name: ${{ github.actor }} ${{ github.event_name }} ${{ github.head_ref }}
+run-name: ${{ github.actor }} ${{ github.event_name }} ${{ github.sha }}
 on: [push]
 jobs:
 #  Validate-YAML-with-Yamale:
@@ -56,7 +56,6 @@ jobs:
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with: 
-          terraform_wrapper: false
           terraform_version: 1.1.7
 
       - name: Terraform fmt
@@ -72,9 +71,9 @@ jobs:
         id: plan
         run: terraform plan -no-color
 
-      - run: echo ${{ steps.plan.outputs.stdout }}
-      - run: echo ${{ steps.plan.outputs.stderr }}
-      - run: echo ${{ steps.plan.outputs.exitcode }}
+      - run: echo "${{ steps.plan.outputs.stdout }}"
+      - run: echo "${{ steps.plan.outputs.stderr }}"
+      - run: echo "${{ steps.plan.outputs.exitcode }}"
       
 #      container:
 #        volumes:
