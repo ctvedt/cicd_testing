@@ -48,7 +48,7 @@ jobs:
     container:
       image: ubuntu:latest
       volumes:
-        - ./tfstate:/tfstate
+        - /home/ctvedt/tfstate:/tfstate
     steps:
       - name: Checkout
         uses: actions/checkout@v3
