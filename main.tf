@@ -26,7 +26,7 @@ resource "docker_container" "nginx" {
   }
 }
 
-resource "docker_container" "nginx" {
+resource "docker_container" "nginx2" {
   image = docker_image.nginx.image_id
   name  = "tutorial2"
   ports {
