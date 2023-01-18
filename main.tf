@@ -31,6 +31,6 @@ resource "docker_container" "nginx2" {
   name  = "tutorial2"
   ports {
     internal = 80
-    external = 8010
+    external = 8019
   }
 }
