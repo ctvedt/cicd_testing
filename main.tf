@@ -22,7 +22,7 @@ resource "docker_container" "nginx1" {
   name  = "nginx1"
   ports {
     internal = 80
-    external = 8009
+    external = 8019
   }
 }
 
@@ -31,6 +31,6 @@ resource "docker_container" "nginx2" {
   name  = "nginx2"
   ports {
     internal = 80
-    external = 8010
+    external = 8020
   }
 }
