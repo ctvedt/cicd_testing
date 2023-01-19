@@ -19,7 +19,7 @@ resource "docker_image" "nginx" {
 
 resource "docker_container" "nginx1" {
   image = docker_image.nginx.image_id
-  name  = "tutorial1"
+  name  = "nginx1"
   ports {
     internal = 80
     external = 8009
@@ -28,7 +28,7 @@ resource "docker_container" "nginx1" {
 
 resource "docker_container" "nginx2" {
   image = docker_image.nginx.image_id
-  name  = "tutorial2"
+  name  = "nginx2"
   ports {
     internal = 80
     external = 8010
