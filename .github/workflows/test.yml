@@ -90,9 +90,15 @@ jobs:
 
       - name: Auto merge on success
         if: steps.terraform_apply.outcome == 'success'
-        uses: "pascalgn/automerge-action@v0.15.6"
-        env:
-          GITHUB_TOKEN: "${{ secrets.PAT }}"
-          MERGE_LABELS: ""
-          MERGE_METHOD: "squash"
-          UPDATE_LABELS: ""
+#       uses: "pascalgn/automerge-action@v0.15.6"
+#       env:
+#         GITHUB_TOKEN: "${{ secrets.PAT }}"
+#         MERGE_LABELS: ""
+#         MERGE_METHOD: "squash"
+#         UPDATE_LABELS: ""
+        uses: daneden/enable-automerge-action@v1
+        with:
+          github-token: ${{ secrets.PAT }}
+          allowed-author: "ctvedt"
+          merge-method: SQUASH
+
