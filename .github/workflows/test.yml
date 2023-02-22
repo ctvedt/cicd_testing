@@ -85,4 +85,11 @@ jobs:
     steps:
       - run: echo "This PR was approved"
       - name: Terraform Apply
+        id: terraform_apply
         run: terraform apply -auto-approve -input=false
+
+      - name: Auto merge on success
+        if: steps.terraform_apply.outcome == 'success'
+        uses: "pascalgn/automerge-action@v0.15.6"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
