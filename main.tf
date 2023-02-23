@@ -44,3 +44,4 @@ resource "docker_container" "nginx_3" {
     external = 8024
   }
 }
+
