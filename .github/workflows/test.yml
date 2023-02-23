@@ -81,6 +81,7 @@ jobs:
   Terraform_step_2:
     if: github.event.review.state == 'approved'
     runs-on: self-hosted
+    environment: production
     needs: ['Terraform_step_1']
     steps:
       - run: echo "This PR was approved"
