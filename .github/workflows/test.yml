@@ -97,9 +97,12 @@ jobs:
 #         MERGE_LABELS: ""
 #         MERGE_METHOD: "squash"
 #         UPDATE_LABELS: ""
-        uses: daneden/enable-automerge-action@v1
+#        uses: daneden/enable-automerge-action@v1
+#        with:
+#          github-token: ${{ secrets.PAT }}
+#          allowed-author: "ctvedt"
+#          merge-method: SQUASH
+        uses: kenhowardpdx/auto-merge-action@v1
         with:
-          github-token: ${{ secrets.PAT }}
-          allowed-author: "ctvedt"
-          merge-method: SQUASH
-
+          merge_method: SQUASH
+          token: ${{ secrets.PAT }}
