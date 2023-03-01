@@ -57,10 +57,10 @@ jobs:
             const validate_result = `${{ steps.validate.outcome }}` === `success` ? `✔️` : `❌`
             const plan_result = `${{ steps.plan.outcome }}` === `success` ? `✔️` : `❌`
   
-            const output = `\`${fmt_result}\` **Terraform Format and Style**
-            `\`${init_result}\` **Terraform Initialization**
-            `\`${validate_result}\` **Terraform Validation**
-            `\`${plan_result}\` **Terraform Plan**
+            const output = `#### \`${fmt_result}\` Terraform Format and Style
+            #### `\`${init_result}\` Terraform Initialization
+            #### `\`${validate_result}\` Terraform Validation
+            #### `\`${plan_result}\` Terraform Plan
 
             <details><summary>Show Plan</summary>
 
