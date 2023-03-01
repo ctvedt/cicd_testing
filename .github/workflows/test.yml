@@ -52,7 +52,10 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style: \`${{ steps.fmt.outcome }}\`
+            const fmt_outcome = ${{ steps.fmt.outcome }}
+            const fmt_result = fmt_outcome === 'success' ? '✔️' : '❌'
+  
+            const output = `#### Terraform Format and Style: \`${fmt_result}\`
             #### Terraform Initialization: \`${{ steps.init.outcome }}\`
             #### Terraform Validation: \`${{ steps.validate.outcome }}\`
             #### Terraform Plan: \`${{ steps.plan.outcome }}\`
