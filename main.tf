@@ -30,8 +30,8 @@ resource "docker_container" "nginx_two" {
   image = docker_image.nginx.image_id
   name  = "nginx2"
   ports {
-    internal = 80
-    external = 8021
+      internal = 80
+      external = 8021
   }
 }
 
