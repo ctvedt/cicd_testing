@@ -1,0 +1,11 @@
+name: ci
+on:
+  deployment_status:
+    environment: protected
+    state: success
+jobs:
+  print:
+    runs-on: self-hosted
+    steps:
+      - name: Print
+        run: echo "deploy"
