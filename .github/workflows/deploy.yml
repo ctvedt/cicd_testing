@@ -8,7 +8,7 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Debug github event
-        run: echo '${{ github.event }}'
+        run: echo '${{ toJSON(github.event) }}'
       - if: github.event.deployment_status.state == 'success'
         run: echo 'DEPLOY SUCCESS!'
       
