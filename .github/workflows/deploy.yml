@@ -1,8 +1,7 @@
-name: ci
+name: deployment
 on:
-  deployment_status:
-    environment: protected
-    state: success
+  deployment:
+
 jobs:
   print:
     runs-on: self-hosted
