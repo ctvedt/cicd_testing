@@ -58,11 +58,11 @@ jobs:
             const plan_result = `${{ steps.plan.outcome }}` === `success` ? `✔️` : `❌`
   
             const output = `| Test | Resultat |
-            |---|---|
+            | :--- | :--- |
             | Terraform Format and Style | ${fmt_result} |
             | Terraform Initialization | ${init_result} |
-            | Terraform Validation | ${validate_result}
-            | Terraform Plan | ${plan_result}
+            | Terraform Validation | ${validate_result} |
+            | Terraform Plan | ${plan_result} |
 
             <details><summary>Show Plan</summary>
 
