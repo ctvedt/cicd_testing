@@ -1,6 +1,7 @@
 name: deployment
 on:
   deployment:
+  deployment_status:
 
 jobs:
   print:
@@ -8,6 +9,4 @@ jobs:
     steps:
       - name: Debug github event
         run: echo '${{ toJSON(github.event) }}'
-      - if: github.event.deployment_status.state == 'success'
-        run: echo 'DEPLOY SUCCESS!'
-      
+      - run: echo 'Deployment status - ${{ github.event.deployment_status.state }}'
