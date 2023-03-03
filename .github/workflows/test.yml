@@ -48,7 +48,7 @@ jobs:
       - name: Terraform show
         id: show
         if: github.event_name == 'pull_request'
-        run: terraform show ~/myplan.tfplan
+        run: terraform show ~/myplan.tfplan -no-color
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
