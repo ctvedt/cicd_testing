@@ -41,7 +41,7 @@ resource "docker_container" "nginx_3" {
   name  = "nginx3"
   ports {
     internal = 80
-    external = 8021
+    external = 8025
   }
 }
 
