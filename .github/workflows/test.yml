@@ -1,58 +1,18 @@
 name: Terraform GitHub Actions Demo
-run-name: ${{ github.actor }} ${{ github.event_name }} ${{ github.sha }}
+run-name: ${{ github.actor }} ${{ github.event_name }}
 on:
-  push:
-    branches:
-      - main
   pull_request:
+    types:
+      - opened
+      - synchronize
+#      - ready_for_review
+#      - closed
+  pull_request_review:
+    types: [submitted]
+
 jobs:
-#  Validate-YAML-with-Yamale:
-#    runs-on: self-hosted
-#    steps:
-#      - name: Checkout
-#        uses: actions/checkout@v3
-#      - name: Validate YAML schema
-#        uses: nrkno/yaml-schema-validator-github-action@v4
-#        with:
-#          schema: schema_yamale.yml
-#          target: datamodel_yamale.yml
-#          # Uncomment to disable strict checks
-#          # no-strict: true
-#  RunPythonScript:
-#    runs-on: self-hosted
-#    steps:
-##      - uses: actions/checkout@v3
-#      - name: Get scripts from repo
-#        uses: actions/checkout@v3
-#        with:
-#          repository: ctvedt/scripts
-#          path: scripts
-#      - name: Set up Python
-#        uses: actions/setup-python@v4
-#        with:
-#          python-version: '3.10'
-##      - name: Create python file
-##        run: |
-##          cat << EOF > script.py
-##          import os
-##          print("This will not fail!")
-##          os.sys.exit(0)
-##          EOF
-#      - name: Run test script
-#        run: python scripts/test.py
-##  Approval:
-##    runs-on: self-hosted
-##    environment: 'protected'
-##    needs: Validate-YAML-with-Yamale
-##    steps:
-##      - name: Print
-##        run: echo "Approved!!"
-  Terraform:
+  Terraform_step_1:
     runs-on: self-hosted
-#    container:
-#      image: ubuntu:latest
-#      volumes:
-#        - /home/ctvedt/tfstate:/tfstate
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -60,8 +20,6 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
-
-#      - run: apt update && apt install unzip
 
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
@@ -84,24 +42,30 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -lock-timeout=5m -input=false
+        run: terraform plan -no-color -lock-timeout=5m -input=false -out ~/myplan.tfplan
         continue-on-error: true
+        
+      - name: Terraform show
+        id: show
+        if: github.event_name == 'pull_request'
+        run: terraform show ~/myplan.tfplan -no-color
 
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
         env:
-          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+#          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: "${{ steps.show.outputs.stdout }}"
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `#### Terraform Format and Style 🖌\`${{ steps.fmt.outcome }}\`
-            #### Terraform Initialization ⚙️\`${{ steps.init.outcome }}\`
-            #### Terraform Validation 🤖\`${{ steps.validate.outcome }}\`
-            #### Terraform Plan 📖\`${{ steps.plan.outcome }}\`
+            const output = `#### Terraform Format and Style: \`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization: \`${{ steps.init.outcome }}\`
+            #### Terraform Validation: \`${{ steps.validate.outcome }}\`
+            #### Terraform Plan: \`${{ steps.plan.outcome }}\`
 
             <details><summary>Show Plan</summary>
 
-            \`\`\`\n
+            \`\`\`diff\n
             ${process.env.PLAN}
             \`\`\`
 
@@ -120,6 +84,31 @@ jobs:
         if: steps.plan.outcome == 'failure'
         run: exit 1
 
+  Terraform_step_2:
+    if: github.event.review.state == 'approved'
+    runs-on: self-hosted
+    environment: protected
+    needs: ['Terraform_step_1']
+    steps:
+      - run: echo "This PR was approved"
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: terraform_apply
         run: terraform apply -auto-approve -input=false
+
+      - name: Auto merge on success
+        if: steps.terraform_apply.outcome == 'success'
+#       uses: "pascalgn/automerge-action@v0.15.6"
+#       env:
+#         GITHUB_TOKEN: "${{ secrets.PAT }}"
+#         MERGE_LABELS: ""
+#         MERGE_METHOD: "squash"
+#         UPDATE_LABELS: ""
+#        uses: daneden/enable-automerge-action@v1
+#        with:
+#          github-token: ${{ secrets.PAT }}
+#          allowed-author: "ctvedt"
+#          merge-method: SQUASH
+        uses: kenhowardpdx/auto-merge-action@v1
+        with:
+          merge_method: SQUASH
+          token: ${{ secrets.PAT }}

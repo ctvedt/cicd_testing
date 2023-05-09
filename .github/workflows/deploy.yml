@@ -1,0 +1,12 @@
+name: deployment
+on:
+  deployment:
+  deployment_status:
+
+jobs:
+  print:
+    runs-on: self-hosted
+    steps:
+      - name: Debug github event
+        run: echo '${{ toJSON(github.event) }}'
+      - run: echo 'Deployment status - ${{ github.event.deployment_status.state }}'
