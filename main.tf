@@ -12,7 +12,6 @@ terraform {
 }
 
 provider "docker" {
-  # comment
 }
 
 resource "docker_image" "nginx" {
@@ -34,6 +33,6 @@ resource "docker_container" "nginx_two" {
   name  = "nginx2"
   ports {
     internal = 80
-    external = 8022
+    external = 8021
   }
 }
