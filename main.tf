@@ -2,6 +2,7 @@ terraform {
   backend "local" {
     path = "/home/ctvedt/tfstate/terraform.tfstate"
   }
+  
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
@@ -10,7 +11,9 @@ terraform {
   }
 }
 
-provider "docker" {}
+provider "docker" {
+  # comment
+}
 
 resource "docker_image" "nginx" {
   name         = "nginx:latest"
@@ -31,6 +34,6 @@ resource "docker_container" "nginx_two" {
   name  = "nginx2"
   ports {
     internal = 80
-    external = 8021
+    external = 8022
   }
 }
