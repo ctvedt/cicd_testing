@@ -2,6 +2,7 @@ terraform {
   backend "local" {
     path = "/home/ctvedt/tfstate/terraform.tfstate"
   }
+  
   required_providers {
     docker = {
       source  = "kreuzwerker/docker"
