@@ -10,7 +10,9 @@ terraform {
   }
 }
 
-provider "docker" {}
+provider "docker" {
+  # comment
+}
 
 resource "docker_image" "nginx" {
   name         = "nginx:latest"
