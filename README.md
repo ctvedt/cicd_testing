@@ -1,3 +1,3 @@
 # cicd_testing
 
-test!!
+just a dumb repo for testing!
