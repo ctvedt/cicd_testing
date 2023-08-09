@@ -53,7 +53,7 @@ jobs:
       - name: artifact
         uses: actions/upload-artifact@v2
         with:
-          name: tfplan-${{ github.repository }}-test-pr-${{ github.event.pull_request.number }} 
+          name: tfplan-test-pr-${{ github.event.pull_request.number }} 
           path: ~/myplan.tfplan
           
       - uses: actions/github-script@v6
