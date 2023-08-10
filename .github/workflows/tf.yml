@@ -24,10 +24,6 @@ jobs:
         with:
           node-version: '16'
 
-      - name: Cache directory
-        id: cache
-        run: mkdir -p ~/cache
-        
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
         with: 
@@ -49,7 +45,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         if: github.event_name == 'pull_request'
-        run: terraform plan -no-color -lock-timeout=5m -input=false -out ~/cache/tf_plan_pr_${{ github.event.pull_request.number }}.tfplan
+        run: terraform plan -no-color -lock-timeout=5m -input=false -out ~/tf_plan_pr_${{ github.event.pull_request.number }}.tfplan
         continue-on-error: true
         
       - name: Terraform show
@@ -57,11 +53,11 @@ jobs:
         if: github.event_name == 'pull_request'
         run: terraform show ~/myplan.tfplan -no-color
 
-      - name: Cache
-        uses: actions/cache/save@v3.3.1
+      - name: artifact
+        uses: actions/upload-artifact@v2
         with:
-          key: tfplan-${{ github.event.repository.name }}-test-pr-${{ github.event.pull_request.number }}
-          path: ~/cache
+          name: tfplan-${{ github.event.repository.name }}-test-pr-${{ github.event.pull_request.number }}
+          path: ~/myplan.tfplan
           
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
@@ -109,16 +105,17 @@ jobs:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: all
 
-      - uses: actions/cache/restore@v3.3.1
+      - uses: dawidd6/action-download-artifact@v2.27.0
 #        if: success() && steps.findPr.outputs.number
         with:
-          fail-on-cache-miss: true
-          key: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
-          path: ~/cache
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: tf.yml
+          name: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
+          path: ~/download/artifacts
     
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ~/cache
+        working-directory: ~/download/artifacts
 
       - name: Terraform Init
         id: terraform_init
@@ -126,4 +123,4 @@ jobs:
 
       - name: Terraform Apply
         id: terraform_apply
-        run: terraform apply -auto-approve ~/cache/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
+        run: terraform apply -auto-approve ~/download/artifacts/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
