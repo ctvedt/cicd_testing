@@ -1,0 +1,124 @@
+name: Terraform plan and apply
+run-name: TF (${{ github.event_name }})
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+#      - ready_for_review
+#      - closed
+
+  push:
+    branches:
+      - main
+jobs:
+  tf_plan:
+    if: github.event_name == 'pull_request'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with: 
+          terraform_version: 1.3.7
+
+      - name: Terraform Format
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        if: github.event_name == 'pull_request'
+        run: terraform plan -no-color -lock-timeout=5m -input=false -out ~/tf_plan_pr_${{ github.event.pull_request.number }}.tfplan
+        continue-on-error: true
+        
+      - name: Terraform show
+        id: show
+        if: github.event_name == 'pull_request'
+        run: terraform show ~/myplan.tfplan -no-color
+
+      - name: artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: tfplan-${{ github.event.repository.name }}-test-pr-${{ github.event.pull_request.number }}
+          path: ~/myplan.tfplan
+          
+      - uses: actions/github-script@v6
+        if: github.event_name == 'pull_request'
+        env:
+#          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+          PLAN: "${{ steps.show.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### Terraform Format and Style: \`${{ steps.fmt.outcome }}\`
+            #### Terraform Initialization: \`${{ steps.init.outcome }}\`
+            #### Terraform Validation: \`${{ steps.validate.outcome }}\`
+            #### Terraform Plan: \`${{ steps.plan.outcome }}\`
+
+            <details><summary>Show Plan</summary>
+
+            \`\`\`diff\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            *Pushed by: @${{ github.actor }}, Action: \`${{ github.event_name }}\`*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+      
+  tf_apply:
+    if: github.event_name == 'push'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v3
+      
+      - uses: jwalton/gh-find-current-pr@v1.3.2
+        id: find_pr
+        with:
+          # Can be "open", "closed", or "all".  Defaults to "open".
+          state: all
+
+      - uses: actions/download-artifact@v3
+#        if: success() && steps.findPr.outputs.number
+        with:
+          name: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
+          path: ~/download/artifacts
+    
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ~/download/artifacts
+
+      - name: Terraform Init
+        id: terraform_init
+        run: terraform init
+
+      - name: Terraform Apply
+        id: terraform_apply
+        run: terraform apply -auto-approve ~/download/artifacts/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
