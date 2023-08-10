@@ -26,7 +26,7 @@ jobs:
 
       - name: Cache directory
         id: cache
-        run: mkdir -p cache
+        run: mkdir -p ~/cache
         
       - name: Set up Terraform
         uses: hashicorp/setup-terraform@v2
