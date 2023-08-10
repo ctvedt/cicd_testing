@@ -114,11 +114,11 @@ jobs:
         with:
           fail-on-cache-miss: true
           key: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
-          path: ~/download/cache
+          path: ~/cache
     
       - name: Display structure of downloaded files
         run: ls -R
-        working-directory: ~/download/cache
+        working-directory: ~/cache
 
       - name: Terraform Init
         id: terraform_init
@@ -126,4 +126,4 @@ jobs:
 
       - name: Terraform Apply
         id: terraform_apply
-        run: terraform apply -auto-approve ~/download/cache/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
+        run: terraform apply -auto-approve ~/cache/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
