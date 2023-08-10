@@ -51,13 +51,13 @@ jobs:
       - name: Terraform show
         id: show
         if: github.event_name == 'pull_request'
-        run: terraform show ~/myplan.tfplan -no-color
+        run: terraform show ~/tf_plan_pr_${{ github.event.pull_request.number }}.tfplan -no-color
 
       - name: artifact
         uses: actions/upload-artifact@v2
         with:
           name: tfplan-${{ github.event.repository.name }}-test-pr-${{ github.event.pull_request.number }}
-          path: ~/myplan.tfplan
+          path: ~/tf_plan_pr_${{ github.event.pull_request.number }}.tfplan
           
       - uses: actions/github-script@v6
         if: github.event_name == 'pull_request'
