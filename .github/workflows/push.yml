@@ -3,18 +3,31 @@ on:
     branches:
       - main
 jobs:
-  test_pr:
-    runs-on: ubuntu-latest
+  tf_apply:
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v1
-      # Find the PR associated with this push, if there is one.
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
+      - uses: actions/checkout@v3
+      
+      - uses: jwalton/gh-find-current-pr@v1.3.2
+        id: find_pr
         with:
           # Can be "open", "closed", or "all".  Defaults to "open".
           state: all
-      # This will echo "Your PR is 7", or be skipped if there is no current PR.
-      - run: echo "Your PR is ${PR}"
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
+
+      - uses: actions/download-artifact@v3
+#        if: success() && steps.findPr.outputs.number
+        with:
+          name: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
+          path: ~/download/artifacts
+    
+      - name: Display structure of downloaded files
+        run: ls -R
+        working-directory: ~/download/artifacts
+
+      - name: Terraform Init
+        id: terraform_init
+        run: terraform init
+
+      - name: Terraform Apply
+        id: terraform_apply
+        run: terraform apply -auto-approve ~/download/artifacts/myplan.tfplanh
