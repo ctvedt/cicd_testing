@@ -1,5 +1,5 @@
-name: Terraform GitHub Actions Demo
-run-name: ${{ github.actor }} ${{ github.event_name }}
+name: Pull request workflow
+run-name: PR
 on:
   pull_request:
     types:
@@ -7,11 +7,11 @@ on:
       - synchronize
 #      - ready_for_review
 #      - closed
-  pull_request_review:
-    types: [submitted]
+#  pull_request_review:
+#    types: [submitted]
 
 jobs:
-  Terraform_step_1:
+  tf_plan:
     runs-on: self-hosted
     steps:
       - name: Checkout
@@ -89,32 +89,3 @@ jobs:
       - name: Terraform Plan Status
         if: steps.plan.outcome == 'failure'
         run: exit 1
-
-  Terraform_step_2:
-    if: github.event.review.state == 'approved'
-    runs-on: self-hosted
-    environment: protected
-    needs: ['Terraform_step_1']
-    steps:
-      - run: echo "This PR was approved"
-      - name: Terraform Apply
-        id: terraform_apply
-        run: terraform apply -auto-approve -input=false
-
-      - name: Auto merge on success
-        if: steps.terraform_apply.outcome == 'success'
-#       uses: "pascalgn/automerge-action@v0.15.6"
-#       env:
-#         GITHUB_TOKEN: "${{ secrets.PAT }}"
-#         MERGE_LABELS: ""
-#         MERGE_METHOD: "squash"
-#         UPDATE_LABELS: ""
-#        uses: daneden/enable-automerge-action@v1
-#        with:
-#          github-token: ${{ secrets.PAT }}
-#          allowed-author: "ctvedt"
-#          merge-method: SQUASH
-        uses: kenhowardpdx/auto-merge-action@v1
-        with:
-          merge_method: SQUASH
-          token: ${{ secrets.PAT }}
