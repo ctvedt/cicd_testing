@@ -125,3 +125,25 @@ jobs:
         id: terraform_apply
 #        run: terraform apply -auto-approve ~/download/artifacts/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
         run: terraform apply -auto-approve tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
+        continue-on-error: true
+
+      - name: Kommenter resultat av terraform apply
+        uses: actions/github-script@v6.4.1
+        with:
+          script: |
+            const apply_result = `${{ steps.terraform_apply.outcome }}` === `success` ? `✔️` : `❌`
+            const pr_number = ${{ steps.find_pr.outputs.number }}
+            const output = `### Terraform Apply (${{ inputs.role }}): ${apply_result}`;
+
+            github.rest.issues.createComment({
+              issue_number: pr_number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+            
+
+      - name: Feil pipeline hvis terraform apply feilet
+        if: steps.terraform_apply.outcome == 'failure'
+        run: exit 1
+
