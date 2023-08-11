@@ -111,11 +111,11 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           workflow: tf.yml
           name: tfplan-${{ github.event.repository.name }}-test-pr-${{ steps.find_pr.outputs.pr }}
-          path: ~/download/artifacts
+          #path: ~/download/artifacts
     
       - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: ~/download/artifacts
+        run: ls -l && pwd
+        #working-directory: ~/download/artifacts
 
       - name: Terraform Init
         id: terraform_init
@@ -123,4 +123,5 @@ jobs:
 
       - name: Terraform Apply
         id: terraform_apply
-        run: terraform apply -auto-approve ~/download/artifacts/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
+#        run: terraform apply -auto-approve ~/download/artifacts/tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
+        run: terraform apply -auto-approve tf_plan_pr_${{ steps.find_pr.outputs.pr }}.tfplan
